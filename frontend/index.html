@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Registration</title>
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --secondary: #a29bfe;
+      --dark: #2d3436;
+      --darker: #1e272e;
+      --light: #f5f6fa;
+      --success: #00b894;
+      --error: #d63031;
+      --text: #f5f6fa;
+      --text-secondary: #dfe6e9;
+    }
+
+    * {
+      transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #1e272e, #7bd1e9, #a70d78, #181810);
+      background-size: 400% 400%;
+      padding: 30px;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: white;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px;
+      transform: scaleX(0);
+      animation: headerUnderline 1.5s ease forwards;
+    }
+
+    @keyframes headerUnderline {
+      to { transform: scaleX(1); }
+    }
+
+    form {
+      max-width: 450px;
+      margin: 0 auto;
+      background: rgba(30, 39, 46, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transform: translateY(20px);
+      opacity: 0;
+      align-items: center;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 3px ;
+      margin-top: 8px;
+      background: white;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--dark);
+      font-size: 1rem;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      background: #5649c0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(108, 92, 231, 0.6);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 40px;
+      height: 200%;
+      background: rgba(255,255,255,0.2);
+      transform: rotate(30deg);
+      transition: all 0.3s;
+    }
+
+    button:hover::after {
+      left: 120%;
+    }
+
+    #notification {
+      text-align: center;
+      margin-top: 25px;
+      font-weight: bold;
+      padding: 15px;
+      border-radius: 8px;
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.3s ease;
+    }
+
+    #notification.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #student-list {
+      max-width: 650px;
+      margin: 50px auto 0;
+      background: rgba(30, 39, 46, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.3s forwards;
+    }
+
+    .student-item {
+      padding: 15px;
+      margin: 10px 0;
+      background: rgba(45, 52, 54, 0.5);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: fadeInRight 0.5s ease forwards;
+    }
+
+    @keyframes fadeInRight {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .student-item:nth-child(1) { animation-delay: 0.5s; }
+    .student-item:nth-child(2) { animation-delay: 0.6s; }
+    .student-item:nth-child(3) { animation-delay: 0.7s; }
+    .student-item:nth-child(4) { animation-delay: 0.8s; }
+    .student-item:nth-child(5) { animation-delay: 0.9s; }
+    .student-item:nth-child(n+6) { animation-delay: 1s; }
+
+    .student-item::before {
+      content: '👤';
+      margin-right: 15px;
+      font-size: 1.2rem;
+    }
+
+    .student-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      background: rgba(45, 52, 54, 0.7);
+    }
+
+    /* Floating particles background */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+      }
+      
+      form, #student-list {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating particles background -->
+  <div class="particles" id="particles"></div>
+
+  <h1>Student Registration</h1>
+  <form id="studentForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required placeholder="Enter student name">
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" required placeholder="Enter student age">
+
+    <label for="course">Course:</label>
+    <input type="text" id="course" required placeholder="Enter course name">
+
+    <button type="submit">Add Student</button>
+  </form>
+
+  <div id="notification"></div>
+
+  <div id="student-list">
+    <h2>Registered Students</h2>
+    <div id="studentsContainer"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('studentForm');
+    const notification = document.getElementById('notification');
+    const studentsContainer = document.getElementById('studentsContainer');
+    const particlesContainer = document.getElementById('particles');
+
+    // Create floating particles
+    function createParticles() {
+      const particleCount = 30;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 2px and 8px
+        const size = Math.random() * 6 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration between 20s and 50s
+        const duration = Math.random() * 30 + 20;
+        particle.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        particle.style.animationDelay = `${Math.random() * 20}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    function showNotification(message, success = true) {
+      notification.textContent = message;
+      notification.style.backgroundColor = success ? 'rgba(0, 184, 148, 0.2)' : 'rgba(214, 48, 49, 0.2)';
+      notification.style.border = success ? '1px solid var(--success)' : '1px solid var(--error)';
+      notification.style.color = success ? 'var(--success)' : 'var(--error)';
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    async function loadStudents() {
+      try {
+        const res = await fetch('http://localhost:3000/students');
+        const students = await res.json();
+
+        studentsContainer.innerHTML = '';
+        students.forEach((s, index) => {
+          const div = document.createElement('div');
+          div.classList.add('student-item');
+          div.innerHTML = `
+            <span style="flex: 1; font-weight: 500;">${s.name}</span>
+            <span style="color: var(--secondary); margin: 0 15px;">${s.course}</span>
+            <span style="color: var(--text-secondary);">${s.age} years</span>
+          `;
+          div.style.animationDelay = `${0.5 + (index * 0.1)}s`;
+          studentsContainer.appendChild(div);
+        });
+      } catch (err) {
+        showNotification('Error loading students', false);
+        console.error(err);
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const age = parseInt(document.getElementById('age').value);
+      const course = document.getElementById('course').value;
+
+      try {
+        const response = await fetch('http://localhost:3000/students', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, age, course })
+        });
+
+        if (response.ok) {
+          showNotification('Student added successfully!', true);
+          form.reset();
+          loadStudents();
+        } else {
+          const err = await response.json();
+          showNotification(`Failed to add student: ${err.error}`, false);
+        }
+      } catch (error) {
+        console.error(error);
+        showNotification('An error occurred while adding student.', false);
+      }
+    });
+
+    // Initialize
+    createParticles();
+    loadStudents();
+  </script>
+</body>
+</html>
