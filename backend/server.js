@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const mongoURI = "mongodb+srv://studentUser:studentPass123@studentcluster.pxpxph1.mongodb.net/studentDB?retryWrites=true&w=majority&appName=StudentCluster";
+const mongoURI = "mongodb+srv://studentUser:Student123@studentcluster.pxpxph1.mongodb.net/studentDB?retryWrites=true&w=majority&appName=StudentCluster";
 
 // Connect to MongoDB Atlas
 mongoose.connect(mongoURI)
